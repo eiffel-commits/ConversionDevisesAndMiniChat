@@ -28,7 +28,7 @@ namespace CalculConversionDevies
                     conversionDevise.CalculerConversion(deviseDepart: "USD", montantAConvertir: 150, deviseCible: "CHF");
 
                     //test4
-                    conversionDevise.CalculerConversion(deviseDepart: "AUD", montantAConvertir: 220, deviseCible: "INR");
+                    //conversionDevise.CalculerConversion(deviseDepart: "AUD", montantAConvertir: 220, deviseCible: "INR");
                 }
                 catch (Exception e)
                 {
