@@ -1,7 +1,8 @@
 {
   "profiles": {
     "CalculConversionDevies": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "commandLineArgs": "D:\\Dev\\ConversionDevises\\CalculConversionDevise\\Input.txt"
     }
   }
 }
