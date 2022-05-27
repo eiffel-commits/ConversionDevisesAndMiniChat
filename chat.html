@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Get the Value of Text Input Field in JavaScript</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="style.css" media="all" />
+	
+</head>
+<body>
+	<!-- version avec bootstrap -->
+	<div style="display: inline-flex;justify-content: center;background-color: gray; padding: 10px;">
+	  <div class="row justify-content-start" style="width: 240px;">
+		<div class="col-12"><span class="boldChat">Chat A</span></div>
+		<div class="col-12">
+			<textarea id="TextareaChatA" name="something" style="height: 200px; max-height: 250px; min-height: 60px; width:97%; min-width: 200px;"></textarea>
+		</div>
+		<div class="col-12">
+			<div class="row justify-content-start">
+				<div class="col-8">
+					<input type="text" style="width: 155px;" placeholder="Type something..." id="InputChatA">
+				</div>
+				<div class="col-4">
+					<button type="button" style="margin-left:10px;" onclick="getInputValueChatA();">OK</button>
+				</div>
+			</div>
+		</div>
+	  </div>
+	  
+	  <div class="row justify-content-start" style="width: 240px;">
+		<div class="col-12"><span class="boldChat">Chat B</span></div>
+		<div class="col-12">
+			<textarea id="TextareaChatB" name="something" style="height: 200px; max-height: 250px; min-height: 60px; width:97%; min-width: 200px;"></textarea>
+		</div>
+		<div class="col-12">
+			<div class="row justify-content-start">
+				<div class="col-8">
+					<input type="text" style="width: 155px;"  placeholder="Type something..." id="InputChatB">
+				</div>
+				<div class="col-4">
+					<button type="button" style="margin-left:10px;" onclick="getInputValueChatB();">OK</button>
+				</div>
+			</div>
+		</div>
+	  </div>
+	</div>
+  
+	<!-- version avec tableau -->
+ 
+	  <!-- <table> -->
+		<!-- <tr> -->
+			<!-- <td> -->
+				<!-- <table> -->
+					<!-- <tr> -->
+						<!-- <td colspan="2"><span class="boldChat">Chat A</span></td> -->
+					<!-- </tr> -->
+					<!-- <tr> -->
+						<!-- <td colspan="2"><textarea id="TextareaChatA" name="something" style="height: 120px; max-height: 150px; min-height: 60px; width:97%; min-width: 200px;"></textarea></td> -->
+					<!-- </tr> -->
+					<!-- <tr> -->
+						<!-- <td><input type="text" placeholder="Type something..." id="InputChatA"></td><td><button type="button" onclick="getInputValueChatA();">OK</button></td> -->
+					<!-- </tr> -->
+				<!-- </table> -->
+			<!-- </td> -->
+			<!-- <td> -->
+				<!-- <table> -->
+					<!-- <tr> -->
+						<!-- <td colspan="2"><span class="boldChat">Chat B</span></td> -->
+					<!-- </tr> -->
+					<!-- <tr> -->
+						<!-- <td colspan="2"><textarea id="TextareaChatB" name="something" style="height: 120px; max-height: 150px; min-height: 60px; width:97%; min-width: 200px;"></textarea></td> -->
+					<!-- </tr> -->
+					<!-- <tr> -->
+					<!-- <td> -->
+						<!-- <input type="text" placeholder="Type something..." id="InputChatB"></td><td><button type="button" onclick="getInputValueChatB();">OK</button></td> -->
+					<!-- </tr> -->
+				<!-- </table> -->
+			<!-- </td> -->
+		<!-- </tr> -->
+	  <!-- </table> -->
+     
+	<script>
+		function getInputValueChatA(){
+			// Selecting the input element from chatA and get its value 
+			var inputVal = document.getElementById("InputChatA").value;
+			
+			// Displaying the value in chat B
+			//alert(inputVal);
+		   document.getElementById('TextareaChatB').value += inputVal + '\n';
+		}
+	  
+		function getInputValueChatB(){
+			// Selecting the input element from chatB and get its value 
+			var inputVal = document.getElementById("InputChatB").value;
+			
+			// Displaying the value in chat A
+			//alert(inputVal);
+		   document.getElementById('TextareaChatA').value += inputVal + '\n';
+		}
+	</script>
+</body>
+</html>
