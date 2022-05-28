@@ -2,6 +2,7 @@
 
 namespace CalculConversionDevise
 {
+    [System.Runtime.InteropServices.Guid("304FA4E8-7B30-4921-81D7-BD41ADFDBBDE")]
     class Program
     {
         static void Main(string[] args)
@@ -27,7 +28,7 @@ namespace CalculConversionDevise
                     //test3
                     conversionDevise.CalculerConversion(deviseDepart: "USD", montantAConvertir: 150, deviseCible: "CHF");
 
-                    //test4
+                    //test4 (cas qui implique de gérer les boucles infinies)
                     conversionDevise.CalculerConversion(deviseDepart: "AUD", montantAConvertir: 220, deviseCible: "INR");
                 }
                 catch (Exception e)
