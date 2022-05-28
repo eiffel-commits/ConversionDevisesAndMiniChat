@@ -35,8 +35,14 @@ namespace TestConversionDevises
             Assert.AreEqual(418, conversionDevise.CalculerConversion(montantAConvertir: 450, deviseDepart: "USD", deviseCible: "CHF"));
         }
 
-        [Test]
         public void Test4()
+        {
+            //test4 (cas qui implique de gérer les boucles infinies)
+            Assert.AreEqual(12438, conversionDevise.CalculerConversion(deviseDepart: "AUD", montantAConvertir: 220, deviseCible: "INR"));
+        }
+
+        [Test]
+        public void Test5()
         {
             // test avec une devise de départ qui n'existe pas 
             string deviseDepart = "URGGGGS";
@@ -45,7 +51,7 @@ namespace TestConversionDevises
         }
 
         [Test]
-        public void Test5()
+        public void Test6()
         {
             // test avec une devise cible qui n'existe pas 
             string deviseCible = "URGYYYYGGGS";
