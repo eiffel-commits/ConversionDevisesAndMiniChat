@@ -14,10 +14,14 @@ namespace CalculConversionDevise
 
         private double _montantAConvertirIntermediaire; // nécesaire pour mémoriser les calculs intermédiares
         private bool _trouve; // nécessaire pour arrêter la recherhce dans l'arbre, le but étant d'être le plus efficace
+        private List<string> _lstAlreadyDeviseParcourue;
 
         public static Dictionary<string, List<DeviseCibleAvecTaux>> DicDevise { get => _dicDevise; set => _dicDevise = value; }
 
-        
+        public ConversionDevise()
+        {
+            _lstAlreadyDeviseParcourue = new List<string>();
+        }
 
         /// <summary>
         /// Fonction de calcul appelée par l'utilisateur
@@ -35,6 +39,7 @@ namespace CalculConversionDevise
             // pour la fonction de calcul récursive
             _montantAConvertirIntermediaire = _montantAConvertirInitial;
             _trouve = false;
+            _lstAlreadyDeviseParcourue.Clear(); // indispensable quand on lance plusieurs calculs à la suite
 
             Console.WriteLine($"Conversion de {montantAConvertir} {deviseDepart} en {deviseCible} ");
 
@@ -50,10 +55,16 @@ namespace CalculConversionDevise
                 throw new ApplicationException($"la devise cible {_deviseCible} n'est pas connue");
             }
 
-            int resulat = CalculerConversion(deviseIntermediaire: deviseDepart);
+            int resulat = CalculerConversion(deviseIntermediaire: deviseDepart, _lstAlreadyDeviseParcourue);
 
-
-            Console.WriteLine($"Résultat => la conversion de {montantAConvertir} {deviseDepart} est égale à {resulat} {deviseCible} ");
+            if (resulat != 0)
+            {
+                Console.WriteLine($"Résultat => la conversion de {montantAConvertir} {deviseDepart} est égale à {resulat} {deviseCible} ");
+            }
+            else
+            {
+                Console.WriteLine($"Résultat => la conversion de {montantAConvertir} {deviseDepart} en {deviseCible} ne peut pas aboutir");
+            }
             Console.WriteLine("-------------");
 
             return resulat;
@@ -63,9 +74,11 @@ namespace CalculConversionDevise
         /// Fonction principale récursive de calcul
         /// </summary>
         /// <param name="deviseIntermediaire"></param>
+        /// <param name="lstAlreadyDeviseParcourue">indispensable pour les chemins qui tournent en boucle</param>
         /// <returns>le montant intermédiaire de conversion calculé</returns>
-        private int CalculerConversion(string deviseIntermediaire)
+        private int CalculerConversion(string deviseIntermediaire, List<string> lstAlreadyDeviseParcourue)
         {
+            lstAlreadyDeviseParcourue.Add(deviseIntermediaire);
             // etape 1 => on cherche s'il existe une conversion d'arrivee simplement dans les valeurs du dico pour la clé correspondante à la devise de départ
             DeviseCibleAvecTaux deviseCibleAvecTauxDirect = _dicDevise[deviseIntermediaire].Where(l => l.DeviseCible.Equals(_deviseCible)).FirstOrDefault();
             if (deviseCibleAvecTauxDirect != null)
@@ -89,7 +102,15 @@ namespace CalculConversionDevise
                         {
                             _montantAConvertirIntermediaire = Math.Round(_montantAConvertirIntermediaire * deviseCibleIntermediaireAvecTaux.TauxChange, 4);
                             Console.WriteLine($"Conversion intermédiaire trouvée de {deviseIntermediaire} vers {deviseCibleIntermediaireAvecTaux.DeviseCible}, montant = {_montantAConvertirIntermediaire}");
-                            CalculerConversion(deviseCibleIntermediaireAvecTaux.DeviseCible);
+
+                            if (!lstAlreadyDeviseParcourue.Contains(deviseCibleIntermediaireAvecTaux.DeviseCible))
+                            {
+                                CalculerConversion(deviseCibleIntermediaireAvecTaux.DeviseCible, lstAlreadyDeviseParcourue);
+                            }
+                            else
+                            {
+                                Console.WriteLine($"Devise {deviseIntermediaire} déjà parcourue, on sort de l'exploration récursive");
+                            }
                         }
                         // c'est un chemin sans issue, on doit poursuivre mais il faut ré-affecter le montant intermédiaire au montant initial
                         else
