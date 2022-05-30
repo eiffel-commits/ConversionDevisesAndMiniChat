@@ -72,7 +72,7 @@ namespace CalculConversionDevise
             int nbTauxChange = int.Parse(lines[numLigne]);
             numLigne++;
 
-            //on lit le tableau de change à la fois dans le sens DeviseDepart => DeviseCible
+            //on lit le tableau de change à la fois dans le sens DeviseDepart => DeviseCible mais également dans le sens DeviseCible => DeviseDepart
 
             // Lecture ligne n°3 à n°3+nbDevises => Lecture dans le sens DeviseDepart => DeviseCible 
             // exemple de ce que l'on doit avoir dans le dico
@@ -86,6 +86,29 @@ namespace CalculConversionDevise
                 string deviseCible = lines[numLigneTaux].Split(separator)[1];
                 string taux = lines[numLigneTaux].Split(separator)[2];
                 double tauxChange = double.Parse(taux.Replace('.',','));
+
+                if (!configFileDevise.DicDevise.ContainsKey(deviseDepart))
+                {
+                    configFileDevise.DicDevise.Add(deviseDepart, new List<DeviseCibleAvecTaux>());
+                }
+                configFileDevise.DicDevise[deviseDepart].Add(new DeviseCibleAvecTaux(deviseCible, tauxChange));
+            }
+
+            // Lecture ligne n°3 à n°3+nbDevises => Lecture dans le sens DeviseCible => DeviseDepart
+            // attention, ici le taux de change doit être inversé (1/taux de change)
+            // exemple de ce que l'on doit avoir dans le dico
+            // clé, values
+            // [CHF], (AUD, 1/0.9661);(EUR,1/1.2053) => ligne 1 et 3 du fichier
+            // [KWU], (JPY, 1/13.1151); => ligne 2 du fichier
+            // [JPY], (AUD, 1/86.0305) => ligne 4 du fichier
+            // [USD], (EUR, 1/1.2989) => ligne 5 du fichier
+            // [INR], (JPY, 1/0.6571) => ligne 6 du fichier
+            for (int numLigneTaux = numLigne; numLigneTaux < (nbTauxChange + numLigne); numLigneTaux++)
+            {
+                string deviseDepart = lines[numLigneTaux].Split(separator)[1]; // attention, ici la devise de départ correspond à colonne deviseCible
+                string deviseCible = lines[numLigneTaux].Split(separator)[0]; // attention, ici la devise cible correspond à colonne deviseDépart
+                string taux = lines[numLigneTaux].Split(separator)[2];
+                double tauxChange = 1/double.Parse(taux.Replace('.', ',')); // attention, on inverse le taux ici
 
                 if (!configFileDevise.DicDevise.ContainsKey(deviseDepart))
                 {
