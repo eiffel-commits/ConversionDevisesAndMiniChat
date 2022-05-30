@@ -93,7 +93,10 @@ namespace CalculConversionDevise
                 // en prenant la valeur et en la considérant comme la devise de départ de façon à explorer tout l'arbre
                 // de façon à optimiser, il n'y a pas besoin de balyer tout l'arbe dès qu'une branche a permis de trouver la conversion en direct (étape1),
                 // d'où le test avec le booléen trouve
-                foreach (DeviseCibleAvecTaux deviseCibleIntermediaireAvecTaux in _dicDevise[deviseIntermediaire])
+                List<DeviseCibleAvecTaux> lstDeviseIntermediaireLaPlusCourte = SearchDeviseInterLaPlusCourte(_dicDevise[deviseIntermediaire]);
+
+                //foreach (DeviseCibleAvecTaux deviseCibleIntermediaireAvecTaux in _dicDevise[deviseIntermediaire])
+                foreach (DeviseCibleAvecTaux deviseCibleIntermediaireAvecTaux in lstDeviseIntermediaireLaPlusCourte)
                 {
                     if (!_trouve)
                     {
@@ -124,6 +127,40 @@ namespace CalculConversionDevise
 
             // règle de gestion => le résulat doit être arrondi à l'entier supérieur.
             return (int)Math.Ceiling(_montantAConvertirIntermediaire);
+        }
+
+        /// <summary>
+        /// recherche de la conversion la plus courte
+        /// </summary>
+        /// <param name="lstDeviseCibleAvecTaux"></param>
+        /// <returns></returns>
+        private List<DeviseCibleAvecTaux> SearchDeviseInterLaPlusCourte(List<DeviseCibleAvecTaux> lstDeviseCibleAvecTaux)
+        {
+            // ex : pour la conversion de AUD vers INR, on a AUD => CHF, JPY mais comme il existe une conversion directe (JPY => KWU, INR) il faut la balayer en premier lieu
+            // on va donc inverser l'ordre de balayage pour explorer JPY en premier
+            List<DeviseCibleAvecTaux> lstDeviseIntermediaireDansOrdreLeplusRapide = new List<DeviseCibleAvecTaux>();
+
+            // on cherche parmi les taux de conversion intermédaire que l'on veut explorer si on a une conversion directe vers la cible
+            // et si c'est le cas, alors on la prend en premier
+            foreach (DeviseCibleAvecTaux deviseCibleAvecTauxIntermediaire in lstDeviseCibleAvecTaux) // AUD => CHF, JPY
+            {
+                DeviseCibleAvecTaux deviseCibleAvecTauxDirect = _dicDevise[deviseCibleAvecTauxIntermediaire.DeviseCible].Where(l => l.DeviseCible.Equals(_deviseCible)).FirstOrDefault();
+                if (deviseCibleAvecTauxDirect != null)
+                {
+                    lstDeviseIntermediaireDansOrdreLeplusRapide.Add(deviseCibleAvecTauxIntermediaire);
+                }
+            }
+
+            // on ajoute les autres conversions à la suite dans la liste
+            foreach (DeviseCibleAvecTaux deviseCibleAvecTauxIntermediaire in lstDeviseCibleAvecTaux) 
+            {
+                if (!lstDeviseIntermediaireDansOrdreLeplusRapide.Contains(deviseCibleAvecTauxIntermediaire))
+                {
+                    lstDeviseIntermediaireDansOrdreLeplusRapide.Add(deviseCibleAvecTauxIntermediaire);
+                }
+            }
+
+            return lstDeviseIntermediaireDansOrdreLeplusRapide;
         }
     }
 }
