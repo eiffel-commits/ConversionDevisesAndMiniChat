@@ -72,7 +72,7 @@ namespace CalculConversionDevise
             int nbTauxChange = int.Parse(lines[numLigne]);
             numLigne++;
 
-            //on lit le tableau de change à la fois dans le sens DeviseDepart => DeviseCible mais également dans le sens DeviseCible => DeviseDepart
+            //on lit le tableau de change à la fois dans le sens DeviseDepart => DeviseCible
 
             // Lecture ligne n°3 à n°3+nbDevises => Lecture dans le sens DeviseDepart => DeviseCible 
             // exemple de ce que l'on doit avoir dans le dico
